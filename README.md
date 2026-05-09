@@ -86,21 +86,19 @@ TC-AUTO-007	Verify user can delete a todo
 TC-AUTO-008	Verify user can delete a completed todo
 TC-AUTO-009	Verify user can clear completed todos
 TC-AUTO-010	Verify user cannot add empty todo
-🏗️ Automation Design
 
+🏗️ Automation Design
 This automation project follows the Page Object Model (POM) design pattern.
 
 📄 TodoPage.ts
-
 Stores locators
 Stores reusable page actions
 
 🧪 todo.spec.ts
-
 Contains automated test scenarios
 Contains validation steps and assertions
-✨ Benefits of This Structure
 
+✨ Benefits of This Structure
 ✅ Better readability
 ✅ Reusable methods
 ✅ Easier maintenance
@@ -118,7 +116,3 @@ The selected scenarios focus on core TodoMVC features such as:
 🗑️ Deleting todos
 🚫 Validating empty input behavior
 
-Test execution results are automatically generated in the "playwright-report" folder.
-You can view the HTML report by running:
-
-npx playwright show-report
