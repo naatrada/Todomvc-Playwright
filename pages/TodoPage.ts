@@ -1,70 +1,107 @@
-import { Page, Locator } from '@playwright/test';
+import { expect, Locator, Page } from '@playwright/test';
 
 export class TodoPage {
   readonly page: Page;
-  readonly todoInput: Locator;
+  readonly newTodoInput: Locator;
   readonly todoItems: Locator;
+  readonly todoCount: Locator;
+  readonly clearCompletedButton: Locator;
+  readonly allFilter: Locator;
+  readonly activeFilter: Locator;
+  readonly completedFilter: Locator;
 
   constructor(page: Page) {
-    this.page = page;   // รับ browser page เข้ามา
-
-    // หา textbox จาก role = textbox และ name = "What needs to be done?"
-    this.todoInput = page.getByRole('textbox', {
-      name: 'What needs to be done?'
-    });
-
-    // หา todo item ทั้งหมดจาก role = listitem
-    this.todoItems = page.getByRole('listitem');
+    this.page = page;
+    this.newTodoInput = page.locator('.new-todo');
+    this.todoItems = page.locator('.todo-list li');
+    this.todoCount = page.locator('.todo-count');
+    this.clearCompletedButton = page.getByRole('button', { name: 'Clear completed' });
+    this.allFilter = page.getByRole('link', { name: 'All' });
+    this.activeFilter = page.getByRole('link', { name: 'Active' });
+    this.completedFilter = page.getByRole('link', { name: 'Completed' });
   }
 
-  async goto() {    // เปิด browser ไปที่ TodoMVC URL
-    await this.page.goto('https://demo.playwright.dev/todomvc/#/');
+async goto(): Promise<void> {
+  await this.page.goto('https://demo.playwright.dev/todomvc/#/');
+  await expect(this.newTodoInput).toBeVisible();
+}
+
+  async addTodo(todoName: string): Promise<void> {
+    await this.newTodoInput.fill(todoName);
+    await this.newTodoInput.press('Enter');
   }
 
-  async addTodo(todoText: string) { // Add todo lists
-    await this.todoInput.fill(todoText);
-    await this.todoInput.press('Enter');
+  async addTodos(todoNames: string[]): Promise<void> {
+    for (const todo of todoNames) {
+      await this.addTodo(todo);
+    }
   }
 
-  async getTodoCount() {    // Count todo items
-    return await this.todoItems.count();
+  todoItemByText(todoName: string): Locator {
+    return this.todoItems.filter({ hasText: todoName });
   }
 
-  async getTodoText(index: number) { // Get text ของ todo ตาม index
-    return await this.todoItems
-      .nth(index)
-      .locator('label')
-      .textContent();
+  async expectTodoVisible(todoName: string): Promise<void> {
+    await expect(this.todoItemByText(todoName)).toBeVisible();
   }
 
-  async toggleTodo(index: number) { // Mark todo as completed
-    await this.todoItems
-      .nth(index)
-      .getByLabel('Toggle Todo')
-      .check();
+  async expectTodoNotVisible(todoName: string): Promise<void> {
+    await expect(this.todoItemByText(todoName)).toHaveCount(0);
   }
 
-  async untoggleTodo(index: number) { // Unmark completed todo
-    await this.todoItems
-      .nth(index)
-      .getByLabel('Toggle Todo')
-      .uncheck();
+  async markTodoCompleted(todoName: string): Promise<void> {
+    await this.todoItemByText(todoName).getByRole('checkbox').check();
   }
 
-  async deleteTodo(index: number) { // Delete todo item
-    const item = this.todoItems.nth(index);
-
-    await item.hover();
-
-    await item
-      .getByRole('button', { name: 'Delete' })
-      .click();
+  async unmarkTodoCompleted(todoName: string): Promise<void> {
+    await this.todoItemByText(todoName).getByRole('checkbox').uncheck();
   }
 
-  async clickFilter(filter: 'All' | 'Active' | 'Completed') {
-    // Click filter menu
-    await this.page
-      .getByRole('link', { name: filter })
-      .click();
+  async expectTodoCompleted(todoName: string): Promise<void> {
+    await expect(this.todoItemByText(todoName)).toHaveClass(/completed/);
+  }
+
+  async expectTodoActive(todoName: string): Promise<void> {
+    await expect(this.todoItemByText(todoName)).not.toHaveClass(/completed/);
+  }
+
+  async editTodo(oldName: string, newName: string): Promise<void> {
+    const todo = this.todoItemByText(oldName);
+    await todo.dblclick();
+
+    const editInput = todo.locator('.edit');
+    await editInput.fill(newName);
+    await editInput.press('Enter');
+  }
+
+async deleteTodo(todoName: string): Promise<void> {
+  const todo = this.todoItemByText(todoName);
+
+  await todo.hover();
+  await todo.locator('.destroy').click({ force: true });
+}
+
+  async filterAll(): Promise<void> {
+    await this.allFilter.click();
+  }
+
+  async filterActive(): Promise<void> {
+    await this.activeFilter.click();
+  }
+
+  async filterCompleted(): Promise<void> {
+    await this.completedFilter.click();
+  }
+
+  async clearCompleted(): Promise<void> {
+    await this.clearCompletedButton.click();
+  }
+
+  async expectTodoCount(expectedText: string): Promise<void> {
+    await expect(this.todoCount).toContainText(expectedText);
+  }
+
+  async expectTodoListCount(count: number): Promise<void> {
+    await expect(this.todoItems).toHaveCount(count);
   }
 }

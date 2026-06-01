@@ -1,118 +1,284 @@
-# 📝 TodoMVC Automation Testing
+# 🧪 React TodoMVC Automation Testing – Playwright + TypeScript
 
-This project contains automated UI test scripts for the TodoMVC web application using Playwright with TypeScript.
+## 📌 Project Overview
 
----
+This repository is a practice automation project created to improve my Playwright and TypeScript automation skills.
 
-# 🌐 Application Under Test
+The implementation focuses on clean structure, Page Object Model, maintainability, and reliable test coverage for core TodoMVC flows.
 
-🔗 TodoMVC Website  
+🔗 Target application:
+
 https://demo.playwright.dev/todomvc/#/
 
+This project was built to practice real-world UI automation design using Playwright while keeping the structure readable, scalable, and easy to maintain.
+
+### 🎯 Key focus areas
+
+* ✅ Playwright with TypeScript
+* ✅ Page Object Model
+* ✅ Reusable selectors and page methods
+* ✅ Clean and maintainable project structure
+* ✅ Reliable test coverage for core TodoMVC functionality
+* ✅ Practical QA automation workflow
+
 ---
 
-# 🛠️ Tools and Framework
+## 📁 Project Structure
 
-- 🎭 Playwright
-- 📘 TypeScript
-- 🟢 Node.js
-- 💻 Visual Studio Code
-
----
-
-# 📁 Project Structure
-
-```text
-todoMVC-automation/
+```bash
+todomvc-playwright/
+│
 ├── pages/
 │   └── TodoPage.ts
+│
 ├── tests/
 │   └── todo.spec.ts
+│
+├── test-data/
+│   └── todos.ts
+│
+├── utils/
+│   └── testHelpers.ts
+│
 ├── playwright.config.ts
 ├── package.json
+├── tsconfig.json
+├── .gitignore
 └── README.md
+```
 
-⚙️ Prerequisites
+### 📂 Folder Details
 
-Before running the test scripts, please make sure the following tools are installed on your device.
+### 📄 pages/
 
-1️⃣ Install Node.js
+Contains Page Object Model classes and reusable page actions.
 
-🔗 Download: https://nodejs.org/
+### 🧪 tests/
 
-Verify installation:
+Contains Playwright test scenarios.
 
+### 📝 test-data/
+
+Stores reusable test data separately from test logic.
+
+### 🛠️ utils/
+
+Helper functions for future scalability.
+
+### ⚙️ playwright.config.ts
+
+Central Playwright configuration.
+
+### 📘 README.md
+
+Project setup and execution guide.
+
+---
+
+## ✅ Test Coverage
+
+The automation suite covers core TodoMVC user flows.
+
+### ➕ Todo Creation
+
+* Add a new todo
+* Add multiple todos
+* Prevent empty todo creation
+
+### ✔️ Todo Status
+
+* Mark todo as completed
+* Unmark completed todo
+
+### ✏️ Todo Management
+
+* Edit existing todo
+* Delete todo
+
+### 🔎 Filters
+
+* Filter All
+* Filter Active
+* Filter Completed
+
+### 🧹 Cleanup
+
+* Clear completed todos
+
+### 🔢 Counter Validation
+
+* Verify active todo counter updates correctly
+
+---
+
+## 🧰 Tech Stack
+
+* Playwright
+* TypeScript
+* Node.js
+
+---
+
+## 🏗️ Automation Design Approach
+
+### 📦 Page Object Model
+
+Page interactions are separated from test scenarios.
+
+Example:
+
+```ts
+await todoPage.addTodo('Buy milk');
+await todoPage.markTodoCompleted('Buy milk');
+```
+
+### Benefits
+
+* ✅ Better readability
+* ✅ Reusable page actions
+* ✅ Easier maintenance
+* ✅ Selectors updated in one place
+
+---
+
+### 🎯 Selector Strategy
+
+The project prioritizes stable selectors.
+
+Examples:
+
+```ts
+page.locator('.new-todo')
+page.locator('.destroy')
+page.getByRole('link', { name: 'Completed' })
+```
+
+### Why
+
+* ✅ Reliable with TodoMVC DOM
+* ✅ Readable
+* ✅ Easier debugging
+
+---
+
+### 🔄 Maintainability
+
+Test data is separated from test logic.
+
+Reusable methods reduce duplication.
+
+The structure is easy to extend with additional scenarios in the future.
+
+---
+
+## 📋 Prerequisites
+
+Install:
+
+* Node.js 18+
+* npm
+
+Check versions:
+
+```bash
 node -v
 npm -v
-2️⃣ Install Visual Studio Code
+```
 
-🔗 Download: https://code.visualstudio.com/
+---
 
-3️⃣ Install Playwright Browsers
+## 🚀 Installation
 
-Playwright browsers will be installed during setup steps below.
+Clone repository:
 
-🚀 Setup Instructions
-📥 Step 1: Clone or Download Project
+```bash
+git clone <repository-url>
+```
 
-Open Terminal and navigate to the project folder.
+Go into project:
 
-cd todoMVC-automation
-📦 Step 2: Install Dependencies
+```bash
+cd todomvc-playwright
+```
+
+Install dependencies:
+
+```bash
 npm install
-🌍 Step 3: Install Playwright Browsers
+```
+
+Install Playwright browsers:
+
+```bash
 npx playwright install
-▶️ How to Run Tests
-✅ Run All Tests
+```
+
+---
+
+## ▶️ Run Tests
+
+Run all tests:
+
+```bash
 npx playwright test
-👀 Run Tests with Browser Visible
+```
+
+Run headed mode:
+
+```bash
 npx playwright test --headed
-🎛️ Run Tests in Playwright UI Mode
-npx playwright test --ui
-📊 View HTML Test Report
+```
+
+Run debug mode:
+
+```bash
+npx playwright test --debug
+```
+
+Run specific test:
+
+```bash
+npx playwright test -g "should delete todo"
+```
+
+---
+
+## 📊 View Playwright Report
+
+After test execution:
+
+```bash
 npx playwright show-report
+```
 
-----------------------------------------------------------------------------------------------------------
+The report includes:
 
-🧪 Automated Test Scenarios
-Test Case ID	Test Scenario
-TC-AUTO-001	Verify user can add a new todo
-TC-AUTO-002	Verify user can add multiple todos
-TC-AUTO-003	Verify user can mark todo as completed
-TC-AUTO-004	Verify user can filter completed todos
-TC-AUTO-005	Verify user can filter active todos
-TC-AUTO-006	Verify user can filter all todos
-TC-AUTO-007	Verify user can delete a todo
-TC-AUTO-008	Verify user can delete a completed todo
-TC-AUTO-009	Verify user can clear completed todos
-TC-AUTO-010	Verify user cannot add empty todo
+* ✅ Test results
+* 📄 Execution logs
+* 📸 Screenshots on failure
+* 🔍 Trace on retry
+* 🎥 Videos on failure
 
-🏗️ Automation Design
-This automation project follows the Page Object Model (POM) design pattern.
+---
 
-📄 TodoPage.ts
-Stores locators
-Stores reusable page actions
+## 📝 Notes
 
-🧪 todo.spec.ts
-Contains automated test scenarios
-Contains validation steps and assertions
+* Tests were executed against the Playwright TodoMVC demo
+* Chromium browser was used
+* `.destroy` selector was used for delete button because it is more reliable for this application
+* Test data is intentionally simple and reusable
+* Project structure is prepared for future scalability
 
-✨ Benefits of This Structure
-✅ Better readability
-✅ Reusable methods
-✅ Easier maintenance
-✅ Better scalability for future test cases
+---
 
-📌 Notes
+## 🎉 Summary
 
-Only high-priority and automation-friendly scenarios were selected from the manual test cases for automation testing.
+This project was created as Playwright + TypeScript automation practice with focus on:
 
-The selected scenarios focus on core TodoMVC features such as:
+* ✅ Readable test structure
+* ✅ Maintainable Page Object Model
+* ✅ Reliable selectors
+* ✅ Reusable page methods
+* ✅ Clean project organization
 
-➕ Adding todos
-✅ Marking todos as completed
-🔍 Filtering todo status
-🗑️ Deleting todos
-🚫 Validating empty input behavior
-
+The goal is to keep the implementation practical, easy to understand, and aligned with real-world QA automation workflow.
